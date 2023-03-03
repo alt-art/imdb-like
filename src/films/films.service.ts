@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { calculatePopularity, calculateRating } from '../utils/ranking';
 import { FilmsCreateDto, FilmsUpdateDto } from './films.dto';
 
 @Injectable()
@@ -17,11 +18,17 @@ export class FilmsService {
   async getFilmById(id: number) {
     const film = await this.prismaService.film.findUnique({
       where: { id },
+      include: { reviews: true },
     });
     if (!film) {
       throw new HttpException('Film not found', HttpStatus.NOT_FOUND);
     }
-    return film;
+    const { reviews } = film;
+    return {
+      ...film,
+      popularity: calculatePopularity(reviews, film.createdAt),
+      rating: calculateRating(reviews),
+    };
   }
 
   async updateFilm(id: number, data: FilmsUpdateDto) {
