@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma.service';
 import { compare } from 'bcrypt';
 import { User } from '@prisma/client';
+import app from '../config/app';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,9 @@ export class AuthService {
   async login(user: User) {
     const payload = { email: user.email, sub: user.id };
     return {
-      token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(payload, {
+        secret: app.appSecret,
+      }),
     };
   }
 }
