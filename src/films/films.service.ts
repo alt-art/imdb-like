@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { calculatePopularity, calculateRating } from '../utils/ranking';
-import { FilmsCreateDto, FilmsUpdateDto } from './films.dto';
+import { FilmsCreateDto, FilmsGetParamsDto, FilmsUpdateDto } from './films.dto';
 
 @Injectable()
 export class FilmsService {
@@ -13,8 +13,24 @@ export class FilmsService {
     });
   }
 
-  async getFilms() {
-    return this.prismaService.film.findMany();
+  async getFilms({ noReview }: FilmsGetParamsDto) {
+    const films = await this.prismaService.film.findMany({
+      include: { reviews: true },
+    });
+    return films
+      .filter((film) => {
+        if (noReview === 'true') {
+          return film.reviews.length === 0;
+        }
+        return true;
+      })
+      .map((film) => {
+        // remove reviews from film
+        return {
+          ...film,
+          reviews: undefined,
+        };
+      });
   }
 
   async getFilmById(id: number) {

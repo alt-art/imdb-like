@@ -7,12 +7,13 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserRole } from '@prisma/client';
 import { Roles } from '../auth/roles.decorator';
-import { FilmsCreateDto, FilmsUpdateDto } from './films.dto';
+import { FilmsCreateDto, FilmsGetParamsDto, FilmsUpdateDto } from './films.dto';
 import { FilmsService } from './films.service';
 
 @Controller('films')
@@ -20,8 +21,8 @@ export class FilmsController {
   constructor(private filmsService: FilmsService) {}
 
   @Get()
-  getFilms() {
-    return this.filmsService.getFilms();
+  getFilms(@Query() params: FilmsGetParamsDto) {
+    return this.filmsService.getFilms(params);
   }
 
   @Get(':id')

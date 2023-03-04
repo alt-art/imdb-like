@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import {
+  IsBooleanString,
   IsDateString,
   IsNotEmpty,
   IsOptional,
@@ -35,4 +36,11 @@ export class FilmsUpdateDto implements Prisma.FilmUpdateInput {
   @IsNotEmpty()
   @IsOptional()
   launchDate?: string;
+}
+
+export class FilmsGetParamsDto {
+  @IsBooleanString()
+  @IsNotEmpty()
+  @IsOptional()
+  noReview?: string;
 }
