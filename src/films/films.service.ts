@@ -7,8 +7,10 @@ import { FilmsCreateDto, FilmsUpdateDto } from './films.dto';
 export class FilmsService {
   constructor(private prismaService: PrismaService) {}
 
-  async addFilm(data: FilmsCreateDto) {
-    return this.prismaService.film.create({ data });
+  async addFilm({ title, director, launchDate }: FilmsCreateDto) {
+    return this.prismaService.film.create({
+      data: { title, director, launchDate: new Date(launchDate) },
+    });
   }
 
   async getFilms() {
@@ -26,15 +28,18 @@ export class FilmsService {
     const { reviews } = film;
     return {
       ...film,
-      popularity: calculatePopularity(reviews, film.createdAt),
+      popularity: calculatePopularity(reviews, film.launchDate),
       rating: calculateRating(reviews),
     };
   }
 
-  async updateFilm(id: number, data: FilmsUpdateDto) {
+  async updateFilm(
+    id: number,
+    { title, director, launchDate }: FilmsUpdateDto,
+  ) {
     return this.prismaService.film.update({
       where: { id },
-      data,
+      data: { title, director, launchDate: launchDate && new Date(launchDate) },
     });
   }
 

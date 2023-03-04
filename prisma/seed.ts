@@ -16,7 +16,7 @@ import { genSalt, hash } from 'bcrypt';
       data: {
         title: `${faker.science.chemicalElement().name} ${faker.random.word()}`,
         director: faker.name.fullName(),
-        year: faker.date.past(10).getFullYear(),
+        launchDate: faker.date.past(),
       },
     });
   }

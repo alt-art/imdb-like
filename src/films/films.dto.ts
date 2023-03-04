@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client';
 import {
-  IsDecimal,
-  IsInt,
+  IsDateString,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -16,9 +15,9 @@ export class FilmsCreateDto implements Prisma.FilmCreateInput {
   @IsNotEmpty()
   director: string;
 
-  @IsInt()
+  @IsDateString()
   @IsNotEmpty()
-  year: number;
+  launchDate: string | Date;
 }
 
 export class FilmsUpdateDto implements Prisma.FilmUpdateInput {
@@ -32,8 +31,8 @@ export class FilmsUpdateDto implements Prisma.FilmUpdateInput {
   @IsOptional()
   director?: string;
 
-  @IsDecimal()
+  @IsDateString()
   @IsNotEmpty()
   @IsOptional()
-  year?: number;
+  launchDate?: string;
 }
