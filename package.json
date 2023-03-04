@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/src/main",
+  "prisma": {
+    "seed": "ts-node ./prisma/seed.ts"
+  },
   "scripts": {
     "build": "nest build",
     "start:dev": "nest start --watch",
     "start:prod": "node .",
+    "migrate": "prisma migrate deploy",
+    "start:demo": "prisma db seed && prisma db push && node .",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
   },
@@ -32,6 +37,7 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@nestjs/cli": "^9.2.0",
     "@nestjs/schematics": "^9.0.4",
     "@types/bcrypt": "^5.0.0",
@@ -42,6 +48,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.3.2",
+    "ts-node": "^10.9.1",
     "typescript": "*"
   }
 }
